@@ -25,10 +25,10 @@ function Cart() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: total*100,
+          amount: total,
         }),
       });
-
+      
       const order = await response.json();
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -43,6 +43,8 @@ function Cart() {
           color: "#000000",
         },
       };
+
+      console.log("Razorpay options:", options);
 
       const razorpay = new window.Razorpay(options);
 
