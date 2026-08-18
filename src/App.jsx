@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Account from "./pages/Account";
+import Search from "./pages/Search";
 import Footer from "./components/Footer";
 // for Routes ends
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
       <Footer />
       </CartProvider> 

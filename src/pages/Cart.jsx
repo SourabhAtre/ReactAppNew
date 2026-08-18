@@ -17,7 +17,45 @@ function Cart() {
     );
   }
 
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: total*100,
+        }),
+      });
+
+      const order = await response.json();
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: "My React Store",
+        description: "Test Payment",
+        order_id: order.id,
+
+
+        theme: {
+          color: "#000000",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.open();
+    } catch (error) {
+      console.error("Checkout error:", error);
+    }
+  };
+
+
   return (
+
+
     <div className="page-width w-full !max-w-[1000px]">
       <h1 className="md:!text-[30px] !text-[26px]">Your Cart</h1>
       <button className="py-[20px] underline text-right md:text-[16px] text-[14px] cursor-pointer ml-auto block" onClick={() => navigate("/shop")}>
@@ -69,7 +107,7 @@ function Cart() {
         <h4>Order Summary</h4>
         {/* <p>Items: {cart.length}</p> */}
         <h3>Total: <strong>${total.toFixed(2)}</strong></h3>
-        <button className="block w-max py-[7px] cursor-pointer text-[16px] px-[30px] mt-[10px] ml-auto text-center bg-[#000] text-[#fff]">
+        <button onClick={handleCheckout} className="block w-max py-[7px] cursor-pointer text-[16px] px-[30px] mt-[10px] ml-auto text-center bg-[#000] text-[#fff]">
           Checkout
         </button>
       </div>
