@@ -9,7 +9,7 @@ export const loginUser = async (email, password) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
     const response = await axios.post(
-      `${API_URL}/login`,
+      `${API_URL}/api/users/login`,
       { email, password }
     );
     return response.data;
