@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
 
 function Cart() {
   const { cart, removeFromCart, updateQuantity, total } = useCart();
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   // empty cart screen
@@ -19,6 +22,7 @@ function Cart() {
 
   const handleCheckout = async () => {
     try {
+      setLoader(true);
       const response = await fetch(`${import.meta.env.VITE_API_URL}/create-order`, {
         method: "POST",
         headers: {
@@ -51,6 +55,9 @@ function Cart() {
       razorpay.open();
     } catch (error) {
       console.error("Checkout error:", error);
+      setError("API Failed.");
+    } finally{
+      setLoader(false);
     }
   };
 
@@ -103,6 +110,18 @@ function Cart() {
 
         </div>
       ))}
+      {loader && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/70 text-white text-[30px] backdrop-blur-[4px]
+">
+          <p>Loading...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/70 text-red text-[30px] backdrop-blur-[4px]">
+          <p>{error}</p>
+        </div>
+      )}
 
       {/* Order Summary */}
       <div className="text-right py-[20px]">
